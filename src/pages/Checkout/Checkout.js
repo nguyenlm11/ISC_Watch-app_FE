@@ -79,6 +79,12 @@ const CheckoutPage = () => {
             key: 'brandName',
         },
         {
+            title: 'Image',
+            dataIndex: ['watch', 'image'],
+            key: 'image',
+            render: (image) => <img src={image} alt="Watch" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />,
+        },
+        {
             title: 'Price',
             dataIndex: ['watch', 'price'],
             key: 'price',

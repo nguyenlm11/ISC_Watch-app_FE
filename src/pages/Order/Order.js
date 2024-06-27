@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Select, message } from 'antd';
+import { Table, Select, message, Card, Space, Typography } from 'antd';
 import orderApi from '../../api/orderApi';
 
 const { Option } = Select;
+const { Title } = Typography;
 
 const OrderManagementPage = () => {
     const [orders, setOrders] = useState([]);
@@ -48,12 +49,29 @@ const OrderManagementPage = () => {
             )
         },
         { title: 'Total', dataIndex: 'total', key: 'total', render: (total) => `$${total}` },
+        {
+            title: 'Items', dataIndex: 'items', key: 'items',
+            render: (items) => (
+                <ul>
+                    {items.map(item => (
+                        <li key={item.watch._id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <img src={item.watch.image} alt={item.watch.watchName} style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '10px' }} />
+                            <span>{item.watch.watchName} - Quantity: {item.quantity}</span>
+                        </li>
+                    ))}
+                </ul>
+            )
+        },
     ];
 
     return (
-        <div>
-            <h2>Order Management</h2>
-            <Table dataSource={orders} columns={columns} rowKey="_id" />
+        <div style={{ padding: '20px' }}>
+            <Card>
+                <Space direction="vertical" size="large" style={{ display: 'flex' }}>
+                    <Title level={2}>Order Management</Title>
+                    <Table dataSource={orders} columns={columns} rowKey="_id" />
+                </Space>
+            </Card>
         </div>
     );
 };
