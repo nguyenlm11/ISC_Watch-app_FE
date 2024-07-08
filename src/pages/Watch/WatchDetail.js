@@ -91,6 +91,12 @@ const DetailPage = () => {
     };
 
     const handleCheckout = () => {
+        if (!user) {
+            message.error("You must be logged in to proceed to checkout");
+            navigate('/login');
+            return;
+        }
+
         handleAddToCart();
         navigate('/checkout');
     };
