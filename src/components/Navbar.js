@@ -12,6 +12,7 @@ import {
   ProfileOutlined,
   UserAddOutlined,
   ShoppingCartOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
@@ -68,35 +69,41 @@ const Navbar = () => {
 
   const subMenuItems = user
     ? [
-        {
-          key: "9",
-          icon: <ProfileOutlined />,
-          label: "Profile",
-          link: "/profile",
-        },
-        {
-          key: "10",
-          icon: <ShoppingCartOutlined />,
-          label: "Cart",
-          link: "/checkout",
-        },
-        {
-          key: "11",
-          icon: <LogoutOutlined />,
-          label: "Logout",
-          link: "/",
-          onClick: handleLogout,
-        },
-      ]
+      {
+        key: "9",
+        icon: <ProfileOutlined />,
+        label: "Profile",
+        link: "/profile",
+      },
+      !user.isAdmin && {
+        key: "10",
+        icon: <ShoppingOutlined />,
+        label: "Orders",
+        link: "/myorders",
+      },
+      !user.isAdmin && {
+        key: "11",
+        icon: <ShoppingCartOutlined />,
+        label: "Cart",
+        link: "/checkout",
+      },
+      {
+        key: "12",
+        icon: <LogoutOutlined />,
+        label: "Logout",
+        link: "/",
+        onClick: handleLogout,
+      },
+    ].filter(Boolean)
     : [
-        { key: "7", icon: <LoginOutlined />, label: "Login", link: "/login" },
-        {
-          key: "8",
-          icon: <UserAddOutlined />,
-          label: "Register",
-          link: "/register",
-        },
-      ];
+      { key: "7", icon: <LoginOutlined />, label: "Login", link: "/login" },
+      {
+        key: "8",
+        icon: <UserAddOutlined />,
+        label: "Register",
+        link: "/register",
+      },
+    ];
 
   const accountLabel = user ? user.membername : "Account";
 

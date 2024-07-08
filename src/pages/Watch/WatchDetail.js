@@ -82,12 +82,27 @@ const DetailPage = () => {
         return date.toLocaleDateString('en-US', options).replace(',', ' at');
     };
 
-    const handleAddToCart = () => {
+    const addToCart = () => {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const item = { watch, quantity };
-        cart.push(item);
+        const existingItemIndex = cart.findIndex(item => item.watch._id === watch._id);
+        if (existingItemIndex > -1) {
+            cart[existingItemIndex].quantity += quantity;
+        } else {
+            const item = { watch, quantity };
+            cart.push(item);
+        }
         localStorage.setItem('cart', JSON.stringify(cart));
         message.success("Added to cart successfully!");
+    };
+
+    const handleAddToCart = () => {
+        if (!user) {
+            message.error("You must be logged in to add to cart");
+            navigate('/login');
+            return;
+        }
+        addToCart();
+        navigate('/cart');
     };
 
     const handleCheckout = () => {
@@ -97,8 +112,9 @@ const DetailPage = () => {
             return;
         }
 
-        handleAddToCart();
-        navigate('/checkout');
+        const buyNowItem = { watch, quantity };
+        localStorage.setItem('buyNowItem', JSON.stringify(buyNowItem));
+        navigate('/checkout', { state: { buyNow: true } });
     };
 
     return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table, InputNumber, Select, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import orderApi from "../../api/orderApi";
 
 const { Option } = Select;
@@ -13,12 +13,20 @@ const CheckoutPage = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-        setCart(cartItems);
-        calculateTotal(cartItems);
-    }, []);
+        const isBuyNow = location.state?.buyNow;
+        if (isBuyNow) {
+            const buyNowItem = JSON.parse(localStorage.getItem('buyNowItem')) || [];
+            setCart([buyNowItem]);
+            calculateTotal([buyNowItem]);
+        } else {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            setCart(cartItems);
+            calculateTotal(cartItems);
+        }
+    }, [location.state]);
 
     const calculateTotal = (items) => {
         const totalAmount = items.reduce((acc, item) => acc + item.watch.price * item.quantity, 0);
@@ -29,7 +37,11 @@ const CheckoutPage = () => {
         const newCart = [...cart];
         newCart[index].quantity = quantity;
         setCart(newCart);
-        localStorage.setItem('cart', JSON.stringify(newCart));
+        if (location.state?.buyNow) {
+            localStorage.setItem('buyNowItem', JSON.stringify(newCart[0]));
+        } else {
+            localStorage.setItem('cart', JSON.stringify(newCart));
+        }
         calculateTotal(newCart);
     };
 
@@ -37,7 +49,11 @@ const CheckoutPage = () => {
         const newCart = [...cart];
         newCart.splice(index, 1);
         setCart(newCart);
-        localStorage.setItem('cart', JSON.stringify(newCart));
+        if (location.state?.buyNow) {
+            localStorage.removeItem('buyNowItem');
+        } else {
+            localStorage.setItem('cart', JSON.stringify(newCart));
+        }
         calculateTotal(newCart);
     };
 
@@ -61,6 +77,7 @@ const CheckoutPage = () => {
             const response = await orderApi.createOrder(orderData);
             message.success("Order placed successfully!");
             localStorage.removeItem('cart');
+            localStorage.removeItem('buyNowItem');
             navigate('/checkout-success');
         } catch (error) {
             message.error("Failed to place order. Please try again.");

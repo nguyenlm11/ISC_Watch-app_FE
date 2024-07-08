@@ -14,6 +14,8 @@ import Profile from './pages/User/Profile';
 import CheckoutPage from './pages/Checkout/Checkout';
 import CheckoutSuccessPage from './pages/Checkout/CheckoutSuccess';
 import OrderManagementPage from './pages/Order/Order';
+import Orders from './pages/User/Orders';
+import CartPage from './pages/User/Cart';
 
 
 const { Content } = Layout;
@@ -34,6 +36,8 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/myorders" element={<Orders />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/checkout-success" element={<CheckoutSuccessPage />} />
             <Route path="/orders" element={<OrderManagementPage />} />
