@@ -76,7 +76,9 @@ const CheckoutPage = () => {
 
             const response = await orderApi.createOrder(orderData);
             message.success("Order placed successfully!");
-            localStorage.removeItem('cart');
+            if (!location.state?.buyNow) {
+                localStorage.removeItem('cart');
+            }
             localStorage.removeItem('buyNowItem');
             navigate('/checkout-success');
         } catch (error) {

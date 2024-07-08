@@ -102,7 +102,6 @@ const DetailPage = () => {
             return;
         }
         addToCart();
-        navigate('/cart');
     };
 
     const handleCheckout = () => {

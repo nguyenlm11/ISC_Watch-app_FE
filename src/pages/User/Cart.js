@@ -111,11 +111,9 @@ const CartPage = () => {
                     </Table.Summary.Row>
                 )}
             />
-            <div style={{ textAlign: "right", marginTop: "20px" }}>
-                <Button type="primary" onClick={handleCheckout}>
-                    Proceed to Checkout
-                </Button>
-            </div>
+            <Button type="primary" onClick={handleCheckout} disabled={!cart.length} style={{ marginTop: "20px" }}>
+                Proceed to Checkout
+            </Button>
         </div>
     );
 };

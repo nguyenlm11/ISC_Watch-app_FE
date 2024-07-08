@@ -85,7 +85,7 @@ const Navbar = () => {
         key: "11",
         icon: <ShoppingCartOutlined />,
         label: "Cart",
-        link: "/checkout",
+        link: "/cart",
       },
       {
         key: "12",
